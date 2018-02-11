@@ -1,0 +1,1 @@
+yaourt -S virtualbox virtualbox-host-modules-arch vagrant

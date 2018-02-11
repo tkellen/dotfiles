@@ -1,4 +1,4 @@
-yaourt -S networkmanager network-manager-applet gnope-keyring
+yaourt -S networkmanager networkmanager-openconnect network-manager-applet gnome-keyring
 systemctl enable networkmanager
 systemctl start NetworkManager
 systemctl enable wpa_supplicants
