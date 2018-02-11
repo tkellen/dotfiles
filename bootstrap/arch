@@ -1,0 +1,97 @@
+# notes for configuring my arch linux setup on a dell 2018 xps
+
+# bring up wireless
+ip link set wlp2s0 up
+wpa_supplicant -B -i wlp2s0 -c <(wpa_passphrase <ssid> <password>)
+systemctl start dhcpcd
+# set time
+timedatectl set-ntp true
+# make efi partition and mark bootable
+parted /dev/nvme0n1 mklabel gpt
+parted /dev/nvme0n1 mkpart efi fat32 1MiB 513MiB
+parted /dev/nvme0n1 set 1 boot on
+# make root partition
+parted /dev/nvme0n1 mkpart ext4 513MiB 480GB
+# make boot partition
+parted /dev/nvme0n1 mkpart ext4 480GB 480.5GB
+# make swap partition
+parted /dev/nvme0n1 mkpart linux-swap 480.5GB 100%
+# encrypting root partition
+cryptsetup -c aes-xts-plain64 -y --use-random luksFormat /dev/nvme0n1p2
+cryptsetup luksOpen /dev/nvme0n1p2 root
+# format efi partition
+mkfs.vfat -F32 /dev/nvme0n1p1
+# format root partition
+mkfs.ext4 /dev/mapper/root
+# format boot partition
+mkfs.ext4 /dev/nvme0n1p3
+# mount root partition
+mount /dev/mapper/root /mnt
+# create boot partition mount point
+mkdir /mnt/boot
+# mount boot partition
+mount /dev/nvme0n1p3 /mnt/boot
+mkdir /mnt/boot/efi
+# create efi partition mount point
+mount /dev/nvme0n1p1 /mnt/boot/efi
+# initialize swap partition
+mkswap /dev/nvme0n1p4
+# enable usage of swap partition
+swapon /dev/nvme0n1p4
+# rank your mirrors, this will take a long time.
+# you can just move a US based mirror up to the top if you want
+mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+rankmirrors /etc/pacman.d/mirrorlist.bak > /etc/pacman.d/mirrorlist
+pacstrap /mnt base grub efibootmgr intel-ucode wpa_supplicant vim git zsh openssh
+# configure fstab
+genfstab /mnt > /mnt/etc/fstab
+# drop into new system
+arch-chroot /mnt
+# configure time
+ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
+hwclock --systohc
+# configure locale
+sed -i '/^.en_US/s/^#//g' /etc/locale.gen
+locale-gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+# configure hostname
+echo devbox > /etc/hostname
+echo "127.0.0.1 localhost
+::1 localhost
+127.0.0.1 devbox.localdomain devbox" > /etc/hosts
+# install grub
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=ArchLinux
+# configure /etc/mkinitcpio.conf
+# MODULES=(ext4)
+# HOOKS=(base udev autodetect keyboard keymap modconf block encrypt filesystems fsck)
+mkinitcpio -p linux
+# configure /etc/default/grub
+# GRUB_CMDLINE_LINUX="cryptdevice=/dev/nvme0n1p2:root resume=/dev/mapper/swap"
+grub-mkconfig -o /boot/grub/grub.cfg
+# add me
+useradd -m -s /bin/bash tkellen
+usermod -aG wheel tkellen
+passwd tkellen
+# uncomment wheel in /etc/sudoers
+# configure root password
+passwd
+# configure yaourt
+pacman -S --needed base-devel yajl
+git clone https://aur.archlinux.org/package-query.git
+cd package-query/
+makepkg -si
+cd ..
+git clone https://aur.archlinux.org/yaourt.git
+cd yaourt/
+makepkg -si
+cd ..
+sudo rm -rf yaourt/ package-query/
+# configure gui
+yaourt -S xorg-server xfce4
+# leave chroot
+exit
+# unmount everything
+umount -R /mnt
+swapoff -a
+# good luck
+reboot

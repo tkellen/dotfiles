@@ -1,0 +1,4 @@
+yaourt -S guake
+cp /usr/share/applications/guake.desktop /etc/xdg/autostart/
+# edit preferences to use desired font (inconsolata w/ powerline)
+guake -p

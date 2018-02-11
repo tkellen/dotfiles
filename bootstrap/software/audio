@@ -1,0 +1,3 @@
+yaourt -S alsa-utils xfce4-pulseaudio-plugin pavucontrol
+systemctl enable alsa-restore
+systemctl start alsa-restore # turn on audio

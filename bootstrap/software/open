@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+yaourt -S whippet
+# not working yet, can't install mimeo

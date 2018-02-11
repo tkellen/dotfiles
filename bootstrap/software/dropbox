@@ -1,0 +1,5 @@
+yaourt -S dropbox
+# start dropbox without a display to get link
+unset DISPLAY
+dropbox
+# use url shown to link account, then manage from gui going forward

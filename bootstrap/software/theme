@@ -1,0 +1,5 @@
+# generate a theme with high density display support
+yaourt -S gtk-engine-murrine nodejs npm optipng inkscape python
+git clone https://github.com/geokapp/arc-variants.git
+cd arc-variants
+./arc-variants -i=blue-hidpi -p=192
