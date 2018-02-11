@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 yaourt -S networkmanager network-manager-applet gnope-keyring
 systemctl enable networkmanager
 systemctl start NetworkManager

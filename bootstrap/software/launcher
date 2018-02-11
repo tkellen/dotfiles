@@ -1,0 +1,3 @@
+yaourt -S rofi
+# configure keyboard shortcut:
+# rofi -theme launcher -run-list-command ". ~/.launcher" -run-command "/bin/zsh -i -c '{cmd}'" -show run
