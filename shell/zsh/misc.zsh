@@ -8,3 +8,5 @@ alias dsnuke="find . -name '*.DS_Store' -type f -ls -delete"
 alias pkey="pbcopy < ~/.ssh/id_rsa.pub"
 # quick editor access
 alias a="atom"
+# use atom as default editor
+export EDITOR=atom
