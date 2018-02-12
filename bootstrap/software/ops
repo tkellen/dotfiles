@@ -1,1 +1,1 @@
-yaourt -S ansible terraform
+yaourt -S ansible terraform aws-cli
