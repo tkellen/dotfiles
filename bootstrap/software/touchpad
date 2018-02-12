@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-yaourt -S xf86-input-libinput xorg-input
+yaourt -S xf86-input-libinput
