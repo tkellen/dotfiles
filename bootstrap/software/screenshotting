@@ -1,0 +1,2 @@
+yaourt -S xfce4-screenshooter
+# configure keyboard shortcut for: xfce4-screenshooter -r -s /home/tkellen/Desktop
