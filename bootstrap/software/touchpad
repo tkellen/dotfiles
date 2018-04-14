@@ -1,2 +1,6 @@
 #!/usr/bin/env bash
 yaourt -S xf86-input-libinput
+# to make the touchpad act like an OSX touchpad, use:
+# Option "ClickMethod" "clickfinger"
+# ...in Section "InputClass" for touchpad located at /usr/share/X11/xorg.conf.d
+# TODO: figure out how to configure this from home directory

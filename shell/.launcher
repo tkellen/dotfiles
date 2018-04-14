@@ -1,1 +1,2 @@
+# ensure rofi (alt+space launcher) lists aliases
 alias | awk -F'[ =]' '{print $1}'
