@@ -1,9 +1,9 @@
 [Unit]
-Description=Devilspie
+Description=Terminal
 PartOf=graphical-session.target
 
 [Service]
-ExecStart=/usr/bin/devilspie
+ExecStart=/usr/bin/xfce4-terminal
 
 [Install]
 WantedBy=xsession.target

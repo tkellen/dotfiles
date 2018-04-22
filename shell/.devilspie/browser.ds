@@ -1,6 +1,6 @@
 (if
   (is (window_role) "browser")
   (begin
-    (set_workspace 1)
+    (set_workspace 2)
   )
 )

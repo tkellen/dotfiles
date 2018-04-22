@@ -1,7 +1,7 @@
 (if
   (contains (application_name) "Slack")
   (begin
-    (set_workspace 3)
+    (set_workspace 5)
     (maximize)
     (geometry "3840x1080+0+0")
   )
