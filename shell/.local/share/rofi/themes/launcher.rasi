@@ -10,9 +10,6 @@
     font:            "Inconsolata 32";
 }
 
-configuration {
-}
-
 #window {
     anchor:     north;
     location:   north;
