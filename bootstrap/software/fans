@@ -1,0 +1,5 @@
+echo "options dell-smm-hwmon ignore_dmi=1" | sudo tee -a /etc/modprobe.d/dell.conf
+echo "HWMON_MODULES="coretemp dell-smm-hwmon" | sudo tee -a /etc/conf.d/lm_sensors
+sudo modprobe dell_smm_hwmon
+sudo smbios-thermal-ctl --set-thermal-mode=cool-bottom
+

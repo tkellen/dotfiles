@@ -1,1 +1,1 @@
-yaourt -S ansible terraform aws-cli
+yaourt -S ansible terraform aws-cli dnsutils

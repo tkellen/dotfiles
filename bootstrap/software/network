@@ -1,5 +1,4 @@
 yaourt -S networkmanager networkmanager-openconnect network-manager-applet gnome-keyring
-systemctl enable networkmanager
 systemctl start NetworkManager
 systemctl enable wpa_supplicants
 gpasswd -a tkellen network

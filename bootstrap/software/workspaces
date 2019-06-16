@@ -1,2 +1,8 @@
 # used force applications to stay on specific workspaces
-yaourt -S devilspie
+yaourt -S glib2 gtk2 lua52 libwnck libx11 xorgproto
+wget https://github.com/skx/kpie/archive/release-0.7.zip
+unzip release-0.7.zip
+cd kpie-release-0.7
+sed -i 's/^LUA_VERSION=5.1/LUA_VERSION=52/' Makefile
+sed -i 's/^LDFLAGS.*dpkg-buildflags.*//' Makefile
+make
