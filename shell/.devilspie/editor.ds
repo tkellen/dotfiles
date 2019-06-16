@@ -1,7 +1,0 @@
-(if
-  (is (application_name) "Atom")
-  (begin
-    (set_workspace 3)
-    (maximize)
-  )
-)

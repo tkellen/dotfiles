@@ -1,9 +1,0 @@
-[Unit]
-Description=Devilspie
-PartOf=graphical-session.target
-
-[Service]
-ExecStart=/usr/bin/devilspie
-
-[Install]
-WantedBy=xsession.target
