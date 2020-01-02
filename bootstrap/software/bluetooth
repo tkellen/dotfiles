@@ -1,2 +1,0 @@
-yaourt -S bluez bluez-utils pulseaudio-bluetooth
-sudo systemctl start bluetooth

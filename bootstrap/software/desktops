@@ -1,2 +1,0 @@
-yaourt -S wmctrl
-# configure keyboard to switch desktops with Super-1/2/3/4 (via `wmclient -s #`)

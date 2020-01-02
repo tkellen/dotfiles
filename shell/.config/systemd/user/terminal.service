@@ -1,9 +1,0 @@
-[Unit]
-Description=Terminal
-PartOf=graphical-session.target
-
-[Service]
-ExecStart=/usr/bin/xfce4-terminal
-
-[Install]
-WantedBy=xsession.target

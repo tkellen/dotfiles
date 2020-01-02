@@ -1,9 +1,0 @@
-yaourt -S pm-utils
-gpasswd -a tkellen power
-# use pm-suspend and pm-hibernate
-# add this to the end of /etc/sudoers
-%power ALL=(ALL) NOPASSWD:/usr/bin/shutdown -h now
-%power ALL=(ALL) NOPASSWD:/usr/bin/reboot
-%power ALL=(ALL) NOPASSWD:/usr/bin/pm-suspend
-%power ALL=(ALL) NOPASSWD:/usr/bin/pm-hibernate
-%power ALL=(ALL) NOPASSWD:/usr/bin/pm-powersave

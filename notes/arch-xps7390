@@ -1,0 +1,95 @@
+# starting with ethernet only
+systemctl start dhcpcd
+# set time
+timedatectl set-ntp true
+# make efi partition and mark bootable
+parted /dev/nvme0n1 mklabel gpt
+parted /dev/nvme0n1 mkpart efi fat32 1MiB 513MiB
+parted /dev/nvme0n1 set 1 boot on
+# make root partition
+parted /dev/nvme0n1 mkpart ext4 513MiB 889GiB
+# make boot partition
+parted /dev/nvme0n1 mkpart ext4 889GiB 889.5GiB
+# make swap partition
+parted /dev/nvme0n1 mkpart linux-swap 889.5GiB 100%
+# encrypting root partition
+cryptsetup -c aes-xts-plain64 -y --use-random luksFormat /dev/nvme0n1p2
+cryptsetup luksOpen /dev/nvme0n1p2 root
+# format efi partition
+mkfs.vfat -F32 /dev/nvme0n1p1
+# format root partition
+mkfs.ext4 /dev/mapper/root
+# format boot partition
+mkfs.ext4 /dev/nvme0n1p3
+# encrypting swap partition to support hibernation
+cryptsetup -c aes-xts-plain64 -y --use-random luksFormat /dev/nvme0n1p4
+cryptsetup luksOpen /dev/nvme0n1p4 swapDevice
+mkswap /dev/mapper/swapDevice
+# mount root partition
+mount /dev/mapper/root /mnt
+# create boot partition mount point
+mkdir /mnt/boot
+# mount boot partition
+mount /dev/nvme0n1p3 /mnt/boot
+mkdir /mnt/boot/efi
+# create efi partition mount point
+mount /dev/nvme0n1p1 /mnt/boot/efi
+# install rankmirrors
+pacman -Sy pacman-contrib
+mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+rankmirrors /etc/pacman.d/mirrorlist.bak > /etc/pacman.d/mirrorlist
+# bootstrap new install
+pacstrap /mnt base grub efibootmgr intel-ucode vim git zsh openssh linux sudo binutils make gcc fakeroot dhcpcd rsync openbox terminus-font
+# configure fstab
+genfstab /mnt > /mnt/etc/fstab
+# drop into new system
+arch-chroot /mnt
+# configure console font
+echo "FONT=ter-932n" > /etc/vconsole.conf
+
+# add mkinitcpio hook for decrypting swap when used for hibernate
+echo "run_hook ()
+{
+    cryptsetup open /dev/nvme0n1p4 swapDevice
+}" > /etc/initcpio/hooks/openswap
+echo "build ()
+{
+   add_runscript
+}
+help ()
+{
+cat<<HELPEOF
+  This opens the swap encrypted partition /dev/nvme0n1p4 in /dev/mapper/swapDevice
+HELPEOF
+}" > /etc/initcpio/install/openswap
+echo "/dev/mapper/swapDevice swap swap defaults 0 0" >> /etc/fstab
+# configure /etc/mkinitcpio.conf
+# MODULES=(ext4)
+# HOOKS=(base udev autodetect keyboard consolefont modconf block encrypt openswap resume filesystems fsck)
+mkinitcpio -p linux
+
+# configure grub
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=ArchLinux
+# configure /etc/default/grub
+# GRUB_CMDLINE_LINUX="cryptdevice=/dev/nvme0n1p2:root root=/dev/mapper/root resume=/dev/mapper/swapDevice rw"
+grub-mkconfig -o /boot/grub/grub.cfg
+
+# add me
+useradd -m -s /bin/zsh tkellen
+usermod -aG wheel tkellen
+passwd tkellen
+# uncomment wheel in /etc/sudoers
+# configure root password
+passwd
+sudo su - tkellen
+mkdir -p sources/tkellen
+git clone https://github.com/tkellen/dotfiles.git ~/sources/tkellen/dotfiles
+~/sources/tkellen/dotfiles/install.sh
+
+# leave chroot, reboot
+exit
+umount -R /mnt
+reboot
+
+# log in and have fun
+startx
