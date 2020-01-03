@@ -31,4 +31,51 @@ mkdir /mnt/boot/efi
 # create efi partition mount point
 mount /dev/nvme0n1p1 /mnt/boot/efi
 # bootstrap new install
-pacstrap /mnt base grub efibootmgr intel-ucode vim git zsh openssh
+pacstrap /mnt base grub efibootmgr intel-ucode vim git zsh openssh linux sudo binutils make gcc fakeroot
+# configure fstab
+genfstab /mnt > /mnt/etc/fstab
+# drop into new system
+arch-chroot /mnt
+# configure time
+ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
+hwclock --systohc
+# configure locale
+sed -i '/^.en_US/s/^#//g' /etc/locale.gen
+locale-gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+# configure hostname
+echo devbox > /etc/hostname
+echo "127.0.0.1 localhost
+::1 localhost
+127.0.0.1 devbox.localdomain devbox" > /etc/hosts
+# install grub
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=ArchLinux
+# configure /etc/mkinitcpio.conf
+# MODULES=(ext4)
+# HOOKS=(base udev autodetect keyboard keymap modconf block encrypt filesystems fsck)
+mkinitcpio -p linux
+# configure /etc/default/grub
+# GRUB_CMDLINE_LINUX="cryptdevice=/dev/nvme0n1p2:root"
+grub-mkconfig -o /boot/grub/grub.cfg
+# add me
+useradd -m -s /bin/zsh tkellen
+usermod -aG wheel tkellen
+passwd tkellen
+# uncomment wheel in /etc/sudoers
+# configure root password
+passwd
+sudo su - tkellen
+# configure yaourt
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+cd ..
+sudo rm -rf yay
+# configure gui
+yay -S xorg-server xfce4
+# leave chroot
+exit
+# unmount everything
+umount -R /mnt
+# good luck
+reboot
