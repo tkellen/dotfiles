@@ -1,0 +1,34 @@
+# notes for configuring my arch linux setup on a dell 2018 xps
+
+# starting with ethernet only
+systemctl start dhcpcd
+# set time
+timedatectl set-ntp true
+# make efi partition and mark bootable
+parted /dev/nvme0n1 mklabel gpt
+parted /dev/nvme0n1 mkpart efi fat32 1MiB 513MiB
+parted /dev/nvme0n1 set 1 boot on
+# make root partition
+parted /dev/nvme0n1 mkpart ext4 513MiB 1000GB
+# make boot partition
+parted /dev/nvme0n1 mkpart ext4 1000GB 100%
+# encrypting root partition
+cryptsetup -c aes-xts-plain64 -y --use-random luksFormat /dev/nvme0n1p2
+cryptsetup luksOpen /dev/nvme0n1p2 root
+# format efi partition
+mkfs.vfat -F32 /dev/nvme0n1p1
+# format root partition
+mkfs.ext4 /dev/mapper/root
+# format boot partition
+mkfs.ext4 /dev/nvme0n1p3
+# mount root partition
+mount /dev/mapper/root /mnt
+# create boot partition mount point
+mkdir /mnt/boot
+# mount boot partition
+mount /dev/nvme0n1p3 /mnt/boot
+mkdir /mnt/boot/efi
+# create efi partition mount point
+mount /dev/nvme0n1p1 /mnt/boot/efi
+# bootstrap new install
+pacstrap /mnt base grub efibootmgr intel-ucode vim git zsh openssh
