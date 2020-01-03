@@ -1,5 +1,3 @@
-# notes for configuring my arch linux setup on a dell 2018 xps
-
 # starting with ethernet only
 systemctl start dhcpcd
 # set time
