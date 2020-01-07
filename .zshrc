@@ -7,6 +7,7 @@ export EDITOR=vim
 source <(antibody init)
 autoload -U promptinit; promptinit
 antibody bundle denysdovhan/spaceship-prompt
+spaceship_vi_mode_disable
 
 # enable shell completions
 autoload -Uz compinit
