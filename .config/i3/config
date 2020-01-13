@@ -6,6 +6,13 @@ set $0 "0: &#xf544; "
 set $1 "1: &#xf6ec; "
 set $2 "2: &#xf126; "
 set $3 "3: &#xf2a0; "
+set $4 "4: &#xf2dd; "
+
+workspace $0 output eDPI DP3
+workspace $1 output eDPI DP3
+workspace $2 output eDPI DP3
+workspace $3 output eDPI DP3
+workspace $4 output DP4-2
 
 # put all conversation apps on one panel
 for_window [workspace=$3] layout stacked
@@ -21,7 +28,7 @@ assign [class="zoom"] $3
 bindsym $mod+d exec --no-startup-id rofi -theme launcher -show run
 bindsym $mod+Return exec termite -e tmux
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id ! --sink 0 -u 5
+bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer --sink 0 -i 5
 bindsym XF86AudioLowerVolume exec --no-startup-id pamixer --sink 0 -d 5
 bindsym XF86AudioMute exec --no-startup-id pamixer --sink 0 -t
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10
@@ -32,6 +39,7 @@ bindsym XF86PowerOff exec --no-startup-id clearine
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"`
+bindsym $mod+Shift+q kill
 
 # move window to scratch pad / cycle through them
 bindsym $mod+Shift+minus move scratchpad
@@ -48,6 +56,8 @@ bindsym $mod+f fullscreen
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
 bindsym $mod+grave workspace $0
 bindsym $mod+1 workspace $1
 bindsym $mod+2 workspace $2
@@ -99,10 +109,24 @@ for_window [class="^jetbrains-.+"][window_type=dialog] focus
 
 font pango:Droid Sans Mono 14
 bar {
-  font pango:Droid Sans Mono 20, FontAwesome 20
+  output eDPI
+  output DP3
+  font pango:Droid Sans Mono 14, FontAwesome 20
   position bottom
   strip_workspace_numbers yes
   tray_output none
+  mode hide
+  modifier $mod
+}
+bar {
+  output DP4-2
+  font pango:Droid Sans Mono 14, FontAwesome 20
+  position bottom
+  strip_workspace_numbers yes
+  tray_output none
+  mode hide
+  modifier $mod
 }
 gaps inner 10
 smart_gaps on
+smart_borders no_gaps

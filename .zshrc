@@ -1,14 +1,13 @@
-# use jdk 12 by default
-export JAVA_HOME=/opt/jdk-12.0.2
 export PATH=${JAVA_HOME}/bin:${PATH}:${HOME}/go/bin
 export EDITOR=vim
+# use jdk 12 by default
+export JAVA_HOME=/opt/jdk-12.0.2
 
 # shell decoration
 source <(antibody init)
 autoload -U promptinit; promptinit
 antibody bundle denysdovhan/spaceship-prompt
 SPACESHIP_PROMPT_ORDER=(
-  # time        # Time stamps section (Disabled)
   user          # Username section
   dir           # Current directory section
   host          # Hostname section
@@ -65,7 +64,6 @@ setopt share_history # Share command history data across terminals.
 bindkey '^[[A' up-line-or-search # Search history matching current input
 bindkey '^[[B' down-line-or-search # Search history matching current input
 
-
 # write out all credentials to ~/.ssh and ~/.aws
 function load-root-creds {
   LPASS_DISABLE_PINENTRY=1 lpass login tyler@scaleout.team
@@ -80,6 +78,3 @@ function vpn {
   LPASS_DISABLE_PINENTRY=1 lpass login tyler@scaleout.team
   lpass show $1 --notes | zsh
 }
-
-
-

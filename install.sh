@@ -37,7 +37,7 @@ echo "LANG=en_US.UTF-8" | sudo tee /etc/locale.conf
 yay -S curl wget
 
 # fonts
-yay -S ttf-droid ttf-inconsolata ttf-font-awesome
+yay -S ttf-droid ttf-iosevka ttf-font-awesome
 git clone https://github.com/powerline/fonts.git
 cd fonts
 ./install
@@ -71,8 +71,7 @@ yay -S lastpass-cli gnome-keyring
 yay -S google-chrome firefox
 
 # shell
-git clone https://github.com/jimeh/tmux-themepack.git ~/.themes/tmux
-yay -S zsh antibody termite tmux
+yay -S zsh antibody alacritty
 
 # chat
 yay -S slack-desktop zoom discord
@@ -111,5 +110,5 @@ yay -S python-pip clearine
 grep -qxF 'HandlePowerKey=ignore' /etc/systemd/logind.conf || echo 'HandlePowerKey=ignore' | sudo tee -a /etc/systemd/logind.conf
 
 # window manager
-yay -S i3-wm xorg-server-wayland rofi
+yay -S i3-wm rofi
 curl https://live.staticflickr.com/4094/4913311714_edca08c0dd_4k_d.jpg > ~/.config/desktop/fire.jpg
