@@ -26,7 +26,7 @@ assign [class="discord"] $3
 assign [class="zoom"] $3
 
 bindsym $mod+d exec --no-startup-id rofi -theme launcher -show run
-bindsym $mod+Return exec termite -e tmux
+bindsym $mod+Return exec termite
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer --sink 0 -i 5
 bindsym XF86AudioLowerVolume exec --no-startup-id pamixer --sink 0 -d 5
