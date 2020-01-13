@@ -1,4 +1,4 @@
-# environment variables
+# use jdk 12 by default
 export JAVA_HOME=/opt/jdk-12.0.2
 export PATH=${JAVA_HOME}/bin:${PATH}:${HOME}/go/bin
 export EDITOR=vim
@@ -7,7 +7,21 @@ export EDITOR=vim
 source <(antibody init)
 autoload -U promptinit; promptinit
 antibody bundle denysdovhan/spaceship-prompt
-spaceship_vi_mode_disable
+SPACESHIP_PROMPT_ORDER=(
+  # time        # Time stamps section (Disabled)
+  user          # Username section
+  dir           # Current directory section
+  host          # Hostname section
+  git           # Git section (git_branch + git_status)
+  aws           # Amazon Web Services section
+  kubecontext   # Kubectl context section
+  exec_time     # Execution time
+  line_sep      # Line break
+  battery       # Battery level and status
+  jobs          # Background jobs indicator
+  exit_code     # Exit code section
+  char          # Prompt character
+)
 
 # enable shell completions
 autoload -Uz compinit
@@ -19,6 +33,22 @@ source <(kubectl completion zsh)
 # use "k" for running kubectl faster (and ensure completions work too)
 alias k="kubectl"
 compdef k="kubectl"
+
+# generate openbox config for desired working mode before starting X
+function start {
+  local mode=${1}
+  local root="${HOME}/.config/openbox"
+  local modePath="${root}/mode"
+  local modeFile="${modePath}/${mode}.xml"
+  if [[ ! -f "${modeFile}" ]]; then
+    printf "Invalid mode, try one of the following:\n"
+    find ${modePath} -type f | xargs -n1 basename | cut -d'.' -f1 | sed 's/^/  /g'
+  else
+    # build openbox config for current working mode
+    CONFIG=$(cat ${modeFile}) envsubst < ${root}/config.xml > ${root}/rc.xml
+    WORKING_MODE=${mode} startx
+  fi
+}
 
 # command history configuration.
 HISTFILE=$HOME/.zsh_history
@@ -35,22 +65,6 @@ setopt share_history # Share command history data across terminals.
 bindkey '^[[A' up-line-or-search # Search history matching current input
 bindkey '^[[B' down-line-or-search # Search history matching current input
 
-# workstation
-function workstation {
-  local left="0x0"
-  local right="3840x0"
-  if [[ "$#" -ne 0 ]]; then
-    DP1=$right
-    DP2=$left
-  else
-    DP1=$left
-    DP2=$right
-  fi
-  xrandr \
-    --output eDP-1 --off \
-    --output DP-1-2 --primary --mode 3840x2160 --pos ${DP1} \
-    --output DP-2-2 --mode 3840x2160 --pos ${DP2}
-}
 
 # write out all credentials to ~/.ssh and ~/.aws
 function load-root-creds {
@@ -59,11 +73,6 @@ function load-root-creds {
   chmod 644 ~/.ssh/*.pem ~/.ssh/id_rsa
   lpass ls Root | grep -oP '(?<=id: )([0-9]+)' | xargs -I{} -n1 bash -c 'lpass show {} --notes > $(eval echo $(lpass show --name {}))'
   chmod 400 ~/.ssh/*.pem ~/.ssh/id_rsa
-}
-
-# some junk until i figure out what is up with openbox/intellij losing focus
-function fij {
-  xdotool windowactivate $(xdotool search --name intellij)
 }
 
 # connect to vpn using command saved in lastpass

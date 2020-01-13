@@ -1,8 +1,0 @@
-xfce4-terminal --hide-menubar --hide-borders --command /usr/bin/tmux &
-JAVA_HOME=/usr/lib/jvm/java-13-openjdk intellij-idea-ultimate-edition &
-google-chrome-stable &
-slack &
-discord &
-QT_SCALE_FACTOR=2 zoom &
-redshift -l geoclue2 &
-nitrogen --restore &

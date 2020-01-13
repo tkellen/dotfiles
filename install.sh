@@ -1,10 +1,14 @@
 #!/bin/bash
-BASE_PATH="$(cd "$(dirname "$0")"; pwd -P)/"
+BASE_PATH="$(cd "$(dirname "$0")"; pwd -P)"
+SCRIPT_FILE=$(basename "${BASH_SOURCE[0]}")
 
 # install dotfiles
 rsync -avzP --exclude .git --exclude .idea ${BASE_PATH}/.[^.]* ~/
-openbox --reconfigure
+# allow easy reconfiguration of this file by running "reup"
+printf "function reup {\n  ${BASE_PATH}/${SCRIPT_FILE}\n  source ~/.zshrc\n}" >> ~/.zshrc
+# reconfigure running openbox with latest config
 
+# give a chance to bail out if we aren't doing an initial setup
 read -p "run bootstrap [y/n]: " -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   exit 1
@@ -33,7 +37,7 @@ echo "LANG=en_US.UTF-8" | sudo tee /etc/locale.conf
 yay -S curl wget
 
 # fonts
-yay -S ttf-droid ttf-inconsolata
+yay -S ttf-droid ttf-inconsolata ttf-font-awesome
 git clone https://github.com/powerline/fonts.git
 cd fonts
 ./install
@@ -43,16 +47,12 @@ sudo grub-mkfont -s 36 -o /boot/grub/fonts/droid.pf2 /usr/share/fonts/droid/Droi
 echo "GRUB_FONT=/boot/grub/fonts/droid.pf2" | sudo tee -a /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
-# openbox
-git clone https://github.com/addy-dclxvi/openbox-theme-collections ~/.themes
-yay -S xorg-xinit xorg-server xorg-fonts-misc python openbox obconfig xdg-utils rofi
-
 # audio
 yay -S pulseaudio pamixer
 
 # screen brightness
-yay -S xbacklight
-sudo usermod -aG video tkellen
+yay -S acpilight
+sudo gpasswd -a tkellen video
 # /etc/systemd/system/backlight.service is owned by video group
 
 # color temperature following day/night
@@ -72,13 +72,16 @@ yay -S google-chrome firefox
 
 # shell
 git clone https://github.com/jimeh/tmux-themepack.git ~/.themes/tmux
-yay -S zsh antibody xfce4-terminal tmux
+yay -S zsh antibody termite tmux
 
 # chat
 yay -S slack-desktop zoom discord
 
 # dev
-yay -S go jdk-openjdk intellij-idea-ultimate-edition keybase docker virtualbox virtualbox-host-modules-arch vagrant
+yay -S jq go jdk-openjdk intellij-idea-ultimate-edition keybase docker linux-aufs virtualbox virtualbox-host-modules-arch vagrant
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo gpasswd -a tkellen docker
 
 # configure network
 echo devbox | sudo tee /etc/hostname
@@ -93,9 +96,6 @@ sudo systemctl enable wpa_supplicants
 sudo gpasswd -a tkellen network
 yay -R dhcpcd
 
-# screenshots
-yay -S deepin-screenshot
-
 # sdks
 wget https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz
 tar xvzf openjdk*.tar.gz
@@ -106,14 +106,10 @@ sudo mv jdk-12.0.2 /opt
 yay -S xf86-input-libinput
 sed -i '/Identifier "libinput touchpad catchall"/a Option "ClickMethod" "clickfinger"' /usr/share/X11/xorg.conf.d/40-libinput.conf
 
-# screen locking
-#yay -S xautolock
-
-# desktop background
-yay -S nitrogen
-mkdir ~/.config/desktop
-curl https://live.staticflickr.com/4094/4913311714_edca08c0dd_4k_d.jpg > ~/.config/desktop/startrails.jpg
-
 # handle power button
 yay -S python-pip clearine
 grep -qxF 'HandlePowerKey=ignore' /etc/systemd/logind.conf || echo 'HandlePowerKey=ignore' | sudo tee -a /etc/systemd/logind.conf
+
+# window manager
+yay -S i3-wm xorg-server-wayland rofi
+curl https://live.staticflickr.com/4094/4913311714_edca08c0dd_4k_d.jpg > ~/.config/desktop/fire.jpg

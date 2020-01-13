@@ -1,0 +1,108 @@
+# modifier key is windows key
+set $mod Mod4
+
+# configure workspaces
+set $0 "0: &#xf544; "
+set $1 "1: &#xf6ec; "
+set $2 "2: &#xf126; "
+set $3 "3: &#xf2a0; "
+
+# put all conversation apps on one panel
+for_window [workspace=$3] layout stacked
+
+# send windows to specific workspaces
+assign [class="termite"] $0
+assign [class="firefox"] $1
+assign [class="jetbrains-idea"] $2
+assign [class="Slack"] $3
+assign [class="discord"] $3
+assign [class="zoom"] $3
+
+bindsym $mod+d exec --no-startup-id rofi -theme launcher -show run
+bindsym $mod+Return exec termite -e tmux
+
+bindsym XF86AudioRaiseVolume exec --no-startup-id ! --sink 0 -u 5
+bindsym XF86AudioLowerVolume exec --no-startup-id pamixer --sink 0 -d 5
+bindsym XF86AudioMute exec --no-startup-id pamixer --sink 0 -t
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10
+bindsym XF86PowerOff exec --no-startup-id clearine
+
+# reload window manager / close current program
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"`
+
+# move window to scratch pad / cycle through them
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
+# manage container or workspace layout / focus / position
+set $left h
+set $down j
+set $up k
+set $right l
+bindsym $mod+b splith
+bindsym $mod+v splitv
+bindsym $mod+f fullscreen
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+bindsym $mod+grave workspace $0
+bindsym $mod+1 workspace $1
+bindsym $mod+2 workspace $2
+bindsym $mod+3 workspace $3
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+bindsym $mod+Shift+grave move container to workspace $0
+bindsym $mod+Shift+1 move container to workspace $1
+bindsym $mod+Shift+2 move container to workspace $2
+bindsym $mod+Shift+3 move container to workspace $3
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# resize container with same keys as above
+mode "resize" {
+  bindsym $left resize shrink width 10px
+  bindsym $down resize grow height 10px
+  bindsym $up resize shrink height 10px
+  bindsym $right resize grow width 10px
+  bindsym Left resize shrink width 10px
+  bindsym Down resize grow height 10px
+  bindsym Up resize shrink height 10px
+  bindsym Right resize grow width 10px
+
+  # Return to default moder
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+# configure appearance
+
+# no borders
+for_window [class=".*"] border pixel 0
+
+# focus on idea dialogs
+for_window [class="^jetbrains-.+"][window_type=dialog] focus
+
+font pango:Droid Sans Mono 14
+bar {
+  font pango:Droid Sans Mono 20, FontAwesome 20
+  position bottom
+  strip_workspace_numbers yes
+  tray_output none
+}
+gaps inner 10
+smart_gaps on

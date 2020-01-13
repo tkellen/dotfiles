@@ -1,0 +1,42 @@
+[colors]
+
+# special
+foreground      = #fafafa
+foreground_bold = #fafafa
+cursor          = #fafafa
+background      = #1d1e1a
+
+# black
+color0  = #000000
+color8  = #615e4b
+
+# red
+color1  = #8a0032
+color9  = #f2005c
+
+# green
+color2  = #609a10
+color10 = #8fe023
+
+# yellow
+color3  = #9b963f
+color11 = #dbd662
+
+# blue
+color4  = #1c01a2
+color12 = #2c00fe
+
+# magenta
+color5  = #643ea5
+color13 = #9d65ff
+
+# cyan
+color6  = #3791a5
+color14 = #58d1ea
+
+# white
+color7  = #b1b1b1
+color15 = #e0dfe0
+
+[options]
+font = Source Code Pro 22px
