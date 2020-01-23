@@ -29,25 +29,11 @@ zstyle ':completion:*' menu select
 setopt COMPLETE_ALIASES
 source <(kubectl completion zsh)
 
+# pipe to clipboard easily
+alias clip="xclip -in -selection clipboard"
 # use "k" for running kubectl faster (and ensure completions work too)
 alias k="kubectl"
 compdef k="kubectl"
-
-# generate openbox config for desired working mode before starting X
-function start {
-  local mode=${1}
-  local root="${HOME}/.config/openbox"
-  local modePath="${root}/mode"
-  local modeFile="${modePath}/${mode}.xml"
-  if [[ ! -f "${modeFile}" ]]; then
-    printf "Invalid mode, try one of the following:\n"
-    find ${modePath} -type f | xargs -n1 basename | cut -d'.' -f1 | sed 's/^/  /g'
-  else
-    # build openbox config for current working mode
-    CONFIG=$(cat ${modeFile}) envsubst < ${root}/config.xml > ${root}/rc.xml
-    WORKING_MODE=${mode} startx
-  fi
-}
 
 # command history configuration.
 HISTFILE=$HOME/.zsh_history
@@ -78,3 +64,27 @@ function vpn {
   LPASS_DISABLE_PINENTRY=1 lpass login tyler@scaleout.team
   lpass show $1 --notes | zsh
 }
+
+# configure dual monitors, flipped if needed
+function dualies {
+  local left="0x0 --primary"
+  local right="3840x0"
+  if [[ $1 == "flipped" ]]; then
+    left="3840x0 --primary"
+    right="0x0"
+  fi
+  xrandr \
+    --output eDP-1 --off \
+    --output DP-3 --mode 3840x2160 --pos ${left} --rotate normal \
+    --output DP-4-2 --mode 3840x2160 --pos ${right} --rotate normal
+}
+
+# configure just laptop monitor
+function single {
+  xrandr \
+    --output eDP-1 --mode 3840x2400 \
+    --output DP-3 --off \
+    --output DP-4-2 --off
+}
+
+source ~/.secrets

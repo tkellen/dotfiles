@@ -1,3 +1,6 @@
 [user]
 	email = tyler@sleekcode.net
 	name = Tyler Kellen
+
+[core]
+    excludesfile = ~tkellen/.gitignore_global

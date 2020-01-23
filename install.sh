@@ -5,7 +5,7 @@ SCRIPT_FILE=$(basename "${BASH_SOURCE[0]}")
 # install dotfiles
 rsync -avzP --exclude .git --exclude .idea ${BASE_PATH}/.[^.]* ~/
 # allow easy reconfiguration of this file by running "reup"
-printf "function reup {\n  ${BASE_PATH}/${SCRIPT_FILE}\n  source ~/.zshrc\n}" >> ~/.zshrc
+printf "\nfunction reup {\n  ${BASE_PATH}/${SCRIPT_FILE}\n  source ~/.zshrc\n}" >> ~/.zshrc
 # reconfigure running openbox with latest config
 
 # give a chance to bail out if we aren't doing an initial setup
@@ -50,6 +50,9 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 # audio
 yay -S pulseaudio pamixer
 
+# video
+yay -S vulkan-intel
+
 # screen brightness
 yay -S acpilight
 sudo gpasswd -a tkellen video
@@ -77,7 +80,7 @@ yay -S zsh antibody alacritty
 yay -S slack-desktop zoom discord
 
 # dev
-yay -S jq go jdk-openjdk intellij-idea-ultimate-edition keybase docker linux-aufs virtualbox virtualbox-host-modules-arch vagrant
+yay -S jq go jdk-openjdk intellij-idea-ultimate-edition keybase docker docker-compose linux-aufs virtualbox virtualbox-host-modules-arch vagrant xclip
 sudo systemctl enable docker
 sudo systemctl start docker
 sudo gpasswd -a tkellen docker
@@ -110,5 +113,5 @@ yay -S python-pip clearine
 grep -qxF 'HandlePowerKey=ignore' /etc/systemd/logind.conf || echo 'HandlePowerKey=ignore' | sudo tee -a /etc/systemd/logind.conf
 
 # window manager
-yay -S i3-wm rofi
+yay -S i3-wm i3blocks rofi
 curl https://live.staticflickr.com/4094/4913311714_edca08c0dd_4k_d.jpg > ~/.config/desktop/fire.jpg

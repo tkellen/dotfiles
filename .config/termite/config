@@ -40,3 +40,4 @@ color15 = #e0dfe0
 
 [options]
 font = Source Code Pro 22px
+scrollback_lines = -1

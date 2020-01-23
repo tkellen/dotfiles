@@ -2,31 +2,31 @@
 set $mod Mod4
 
 # configure workspaces
-set $0 "0: &#xf544; "
-set $1 "1: &#xf6ec; "
-set $2 "2: &#xf126; "
-set $3 "3: &#xf2a0; "
+set $0 "0: &#xf471; "
+set $1 "1: &#xf126; "
+set $2 "2: &#xf2a0; "
+set $3 "3: &#xf6ec; "
 set $4 "4: &#xf2dd; "
 
-workspace $0 output eDPI DP3
-workspace $1 output eDPI DP3
-workspace $2 output eDPI DP3
-workspace $3 output eDPI DP3
-workspace $4 output DP4-2
+workspace $0 output eDP-1 DP-3
+workspace $1 output eDP-1 DP-3
+workspace $2 output eDP-1 DP-3
+workspace $3 output eDP-1 DP-3
+workspace $4 output eDP-1 DP-3
 
 # put all conversation apps on one panel
 for_window [workspace=$3] layout stacked
 
 # send windows to specific workspaces
-assign [class="termite"] $0
-assign [class="firefox"] $1
-assign [class="jetbrains-idea"] $2
-assign [class="Slack"] $3
-assign [class="discord"] $3
-assign [class="zoom"] $3
+assign [class="termite-persist"] $0
+assign [class="jetbrains-idea"] $1
+assign [class="Slack"] $2
+assign [class="discord"] $2
+assign [class="zoom"] $2
 
 bindsym $mod+d exec --no-startup-id rofi -theme launcher -show run
 bindsym $mod+Return exec termite
+bindsym $mod+Shift+Return exec firefox
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer --sink 0 -i 5
 bindsym XF86AudioLowerVolume exec --no-startup-id pamixer --sink 0 -d 5
@@ -50,14 +50,13 @@ set $left h
 set $down j
 set $up k
 set $right l
-bindsym $mod+b splith
-bindsym $mod+v splitv
 bindsym $mod+f fullscreen
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
+bindsym $mod+p move workspace to output right
 bindsym $mod+grave workspace $0
 bindsym $mod+1 workspace $1
 bindsym $mod+2 workspace $2
@@ -70,36 +69,6 @@ bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
-bindsym $mod+Shift+grave move container to workspace $0
-bindsym $mod+Shift+1 move container to workspace $1
-bindsym $mod+Shift+2 move container to workspace $2
-bindsym $mod+Shift+3 move container to workspace $3
-bindsym $mod+Shift+$left move left
-bindsym $mod+Shift+$down move down
-bindsym $mod+Shift+$up move up
-bindsym $mod+Shift+$right move right
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
-
-# resize container with same keys as above
-mode "resize" {
-  bindsym $left resize shrink width 10px
-  bindsym $down resize grow height 10px
-  bindsym $up resize shrink height 10px
-  bindsym $right resize grow width 10px
-  bindsym Left resize shrink width 10px
-  bindsym Down resize grow height 10px
-  bindsym Up resize shrink height 10px
-  bindsym Right resize grow width 10px
-
-  # Return to default moder
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
-}
-
-# configure appearance
 
 # no borders
 for_window [class=".*"] border pixel 0
@@ -109,23 +78,15 @@ for_window [class="^jetbrains-.+"][window_type=dialog] focus
 
 font pango:Droid Sans Mono 14
 bar {
-  output eDPI
-  output DP3
+  output eDP-1
+  output DP-3
   font pango:Droid Sans Mono 14, FontAwesome 20
   position bottom
   strip_workspace_numbers yes
   tray_output none
   mode hide
   modifier $mod
-}
-bar {
-  output DP4-2
-  font pango:Droid Sans Mono 14, FontAwesome 20
-  position bottom
-  strip_workspace_numbers yes
-  tray_output none
-  mode hide
-  modifier $mod
+#  status_command i3blocks
 }
 gaps inner 10
 smart_gaps on
