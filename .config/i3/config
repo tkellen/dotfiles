@@ -1,3 +1,7 @@
+# configure primary and secondary monitors
+set $primary DP-4-2
+set $secondary DP-3-2
+
 # modifier key is windows key
 set $mod Mod4
 
@@ -6,27 +10,27 @@ set $0 "0: &#xf471; "
 set $1 "1: &#xf126; "
 set $2 "2: &#xf2a0; "
 set $3 "3: &#xf6ec; "
-set $4 "4: &#xf2dd; "
 
-workspace $0 output eDP-1 DP-3
-workspace $1 output eDP-1 DP-3
-workspace $2 output eDP-1 DP-3
-workspace $3 output eDP-1 DP-3
-workspace $4 output eDP-1 DP-3
+workspace $0 output $primary $secondary
+workspace $1 output $primary $secondary
+workspace $2 output $primary $secondary
+workspace $3 output $primary $secondary
 
 # put all conversation apps on one panel
-for_window [workspace=$3] layout stacked
+for_window [workspace=$2] layout tabbed
 
 # send windows to specific workspaces
-assign [class="termite-persist"] $0
 assign [class="jetbrains-idea"] $1
 assign [class="Slack"] $2
 assign [class="discord"] $2
 assign [class="zoom"] $2
 
+bindsym $mod+Escape exec --no-startup-id clearine
+bindsym $mod+m exec --no-startup-id bash ~/.config/i3/layout
+bindsym $mod+Shift+m exec --no-startup-id xrandr --output eDP-1 --off
 bindsym $mod+d exec --no-startup-id rofi -theme launcher -show run
 bindsym $mod+Return exec termite
-bindsym $mod+Shift+Return exec firefox
+bindsym $mod+Shift+Return exec google-chrome-stable
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer --sink 0 -i 5
 bindsym XF86AudioLowerVolume exec --no-startup-id pamixer --sink 0 -d 5
@@ -38,7 +42,6 @@ bindsym XF86PowerOff exec --no-startup-id clearine
 # reload window manager / close current program
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"`
 bindsym $mod+Shift+q kill
 
 # move window to scratch pad / cycle through them
@@ -46,10 +49,6 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 
 # manage container or workspace layout / focus / position
-set $left h
-set $down j
-set $up k
-set $right l
 bindsym $mod+f fullscreen
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
@@ -61,14 +60,10 @@ bindsym $mod+grave workspace $0
 bindsym $mod+1 workspace $1
 bindsym $mod+2 workspace $2
 bindsym $mod+3 workspace $3
-bindsym $mod+$left focus left
-bindsym $mod+$down focus down
-bindsym $mod+$up focus up
-bindsym $mod+$right focus right
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym $mod+Left move workspace to output left
+bindsym $mod+Down move workspace to output down
+bindsym $mod+Up move workspace to output up
+bindsym $mod+Right move workspace to output right
 
 # no borders
 for_window [class=".*"] border pixel 0
@@ -78,16 +73,18 @@ for_window [class="^jetbrains-.+"][window_type=dialog] focus
 
 font pango:Droid Sans Mono 14
 bar {
-  output eDP-1
-  output DP-3
+  output primary
+  output $secondary
   font pango:Droid Sans Mono 14, FontAwesome 20
   position bottom
   strip_workspace_numbers yes
   tray_output none
   mode hide
   modifier $mod
-#  status_command i3blocks
 }
 gaps inner 10
 smart_gaps on
 smart_borders no_gaps
+
+exec --no-startup-id i3-msg 'workspace $0; exec termite'
+exec --no-startup-id i3-msg 'workspace $3; exec google-chrome-stable'

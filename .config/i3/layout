@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+SCRIPT_PATH="$(cd "$(dirname "$BASH_SOURCE[0]")"; pwd -P)"
+
+# hash serial number of all connected monitors with logical device name
+signature=$(xrandr --prop | grep -A2 EDID | md5sum | cut -c -8)
+
+# because external devices are detected in a non-deterministic fashion, use a
+# hash of serial-number-to-device-name
+declare -A configurations=(
+  ["86e20962"]="laptop-screen-only"
+  ["973a72ae"]="docked"
+  ["f20bd56c"]="docked-invert"
+)
+config=${configurations[$signature]}
+
+# configure default mode (laptop alone)
+primary=eDP-1
+secondary=eDP-1
+xset +dpms
+xset s on
+xrandr \
+  --output eDP-1 --mode 3840x2400 --primary \
+  --output DP-3 --off \
+  --output DP-4-2 --off
+
+# configure docked modes
+if [[ "${config}" =~ "docked" ]]; then
+  # disable power management when docked
+  xset -dpms
+  xset s off
+  primary=DP-3-2
+  secondary=DP-4-2
+  if [[ "${config}" =~ "invert" ]]; then
+    primary=DP-4-2
+    secondary=DP-3-2
+  fi
+  xrandr \
+    --output ${primary} --mode 3840x2160 --pos 0x0 --primary \
+    --output ${secondary} --mode 3840x2160 --right-of ${primary} \
+    --output eDP-1 --mode 3840x2400 --below ${primary}
+fi
+
+# ensure stylus maps to laptop screen
+xinput --map-to-output $(xinput --list | sed -nr 's/.*Wacom.*Pen Pen.*id=([0-9]*).*/\1/p') eDP-1
+
+# configure primary and secondary workspaces
+sed -i "2cset \$primary ${primary}" ${SCRIPT_PATH}/config
+sed -i "3cset \$secondary ${secondary}" ${SCRIPT_PATH}/config
+i3-msg reload
+
+# send workspaces to correct monitor
+i3-msg "[workspace=0] move workspace to ${primary}"
+i3-msg "[workspace=1] move workspace to ${primary}"
+i3-msg "[workspace=2] move workspace to ${primary}"
+i3-msg "[workspace=3] move workspace to ${primary}"
+
+# scale backgrounds
+feh --bg-scale ~/.config/desktop/fire.jpg &
+
+# ensure external mouse wakes up
+modprobe psmouse

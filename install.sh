@@ -79,6 +79,9 @@ yay -S zsh antibody alacritty
 # chat
 yay -S slack-desktop zoom discord
 
+# password storage
+yay -S lpass gnome-keyring seahorse
+
 # dev
 yay -S jq go jdk-openjdk intellij-idea-ultimate-edition keybase docker docker-compose linux-aufs virtualbox virtualbox-host-modules-arch vagrant xclip
 sudo systemctl enable docker
@@ -91,7 +94,7 @@ echo "127.0.0.1 localhost
 ::1 localhost
 127.0.0.1 devbox.localdomain devbox" | sudo tee /etc/hosts
 
-yay -S networkmanager resolvconf openconnet
+yay -S networkmanager resolvconf openconnect
 sudo systemctl enable NetworkManager
 sudo systemctl start NetworkManager
 sudo systemctl enable wpa_supplicants
@@ -108,6 +111,9 @@ sudo mv jdk-12.0.2 /opt
 yay -S xf86-input-libinput
 sed -i '/Identifier "libinput touchpad catchall"/a Option "ClickMethod" "clickfinger"' /usr/share/X11/xorg.conf.d/40-libinput.conf
 
+# handle touchscreen
+yay -S xorg-xinput
+
 # handle power button
 yay -S python-pip clearine
 grep -qxF 'HandlePowerKey=ignore' /etc/systemd/logind.conf || echo 'HandlePowerKey=ignore' | sudo tee -a /etc/systemd/logind.conf
@@ -115,3 +121,6 @@ grep -qxF 'HandlePowerKey=ignore' /etc/systemd/logind.conf || echo 'HandlePowerK
 # window manager
 yay -S i3-wm i3blocks rofi
 curl https://live.staticflickr.com/4094/4913311714_edca08c0dd_4k_d.jpg > ~/.config/desktop/fire.jpg
+
+# neato cursors
+yay -S capitaine-cursors-hidpi
