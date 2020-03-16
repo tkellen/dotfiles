@@ -8,8 +8,9 @@ signature=$(xrandr --prop | grep -A2 EDID | md5sum | cut -c -8)
 # hash of serial-number-to-device-name
 declare -A configurations=(
   ["86e20962"]="laptop-screen-only"
-  ["973a72ae"]="docked"
-  ["f20bd56c"]="docked-invert"
+  ["973a72ae"]="docked-triple"
+  ["f20bd56c"]="docked-triple-invert"
+  ["4feb6ac7"]="docked-double-stacked"
 )
 config=${configurations[$signature]}
 
@@ -20,7 +21,7 @@ xset +dpms
 xset s on
 xrandr \
   --output eDP-1 --mode 3840x2400 --primary \
-  --output DP-3 --off \
+  --output DP-3-2 --off \
   --output DP-4-2 --off
 
 # configure docked modes
@@ -28,9 +29,21 @@ if [[ "${config}" =~ "docked" ]]; then
   # disable power management when docked
   xset -dpms
   xset s off
+fi
+
+if [[ "${config}" =~ "double" ]]; then
+  primary=DP-3-2
+  xrandr \
+    --output DP-3-2 --mode 3840x2160 --pos 0x0 --primary \
+    --output eDP-1 --mode 3840x2400 --below ${primary}
+  secondaryPosition=down
+fi
+
+if [[ "${config}" =~ "triple" ]]; then
   primary=DP-3-2
   secondary=DP-4-2
-  if [[ "${config}" =~ "invert" ]]; then
+  secondaryPosition=right
+  if [[ "${config}" =~ "invert-triple" ]]; then
     primary=DP-4-2
     secondary=DP-3-2
   fi
@@ -46,6 +59,7 @@ xinput --map-to-output $(xinput --list | sed -nr 's/.*Wacom.*Pen Pen.*id=([0-9]*
 # configure primary and secondary workspaces
 sed -i "2cset \$primary ${primary}" ${SCRIPT_PATH}/config
 sed -i "3cset \$secondary ${secondary}" ${SCRIPT_PATH}/config
+sed -i "4cset \$secondaryPosition ${secondaryPosition}" ${SCRIPT_PATH}/config
 i3-msg reload
 
 # send workspaces to correct monitor
@@ -56,6 +70,3 @@ i3-msg "[workspace=3] move workspace to ${primary}"
 
 # scale backgrounds
 feh --bg-scale ~/.config/desktop/fire.jpg &
-
-# ensure external mouse wakes up
-modprobe psmouse

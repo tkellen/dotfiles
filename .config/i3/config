@@ -1,6 +1,7 @@
 # configure primary and secondary monitors
 set $primary DP-4-2
 set $secondary DP-3-2
+set $secondaryPosition right
 
 # modifier key is windows key
 set $mod Mod4
@@ -55,7 +56,7 @@ bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
-bindsym $mod+p move workspace to output right
+bindsym $mod+p move workspace to output $secondaryPosition
 bindsym $mod+grave workspace $0
 bindsym $mod+1 workspace $1
 bindsym $mod+2 workspace $2
