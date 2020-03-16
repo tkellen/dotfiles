@@ -4,3 +4,6 @@
 
 [core]
     excludesfile = /home/tkellen/.gitignore_global
+
+[pull]
+	rebase = true
