@@ -17,9 +17,6 @@ dbus-update-activation-environment --systemd DISPLAY
 
 # start apps
 intellij-idea-ultimate-edition &
-slack &
-discord &
-zoom &
 redshift -l geoclue2 &
 
 echo "Xcursor.theme: ${XCURSOR_THEME}" > ~/.Xresources

@@ -1,13 +1,7 @@
 export PATH=${JAVA_HOME}/bin:${PATH}:${HOME}/go/bin
 export EDITOR=vim
-# use jdk 12 by default
-export JAVA_HOME=/opt/jdk-12.0.2
 # don't download terraform plugins everywhere
 export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
-# try to stop gpu freeze / crash
-# https://bbs.archlinux.org/viewtopic.php?id=250765&p=5
-#https://gist.github.com/finalfantasia/cb8041996f540a158f18
-export _JAVA_OPTIONS='-Dsun.java2d.opengl=true -Dawt.useSystemAAFontSettings=on'
 
 # enable emacs-style control
 set -o emacs
@@ -22,7 +16,7 @@ SPACESHIP_PROMPT_ORDER=(
   host          # Hostname section
   git           # Git section (git_branch + git_status)
   aws           # Amazon Web Services section
-  kubecontext   # Kubectl context section
+  # kubecontext   # Kubectl context section
   exec_time     # Execution time
   line_sep      # Line break
   battery       # Battery level and status
