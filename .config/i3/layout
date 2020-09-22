@@ -11,6 +11,7 @@ declare -A configurations=(
   ["973a72ae"]="docked-triple"
   ["f20bd56c"]="docked-triple-invert"
   ["4feb6ac7"]="docked-double-stacked"
+  ["de24ae7f"]="docked-rockland"
 )
 config=${configurations[$signature]}
 
@@ -35,6 +36,14 @@ if [[ "${config}" =~ "double" ]]; then
   primary=DP-3-2
   xrandr \
     --output DP-3-2 --mode 3840x2160 --pos 0x0 --primary \
+    --output eDP-1 --mode 3840x2400 --below ${primary}
+  secondaryPosition=down
+fi
+
+if [[ "${config}" =~ "rockland" ]]; then
+  primary=DP-3
+  xrandr \
+    --output DP-3 --mode 3840x2160 --pos 0x0 --primary \
     --output eDP-1 --mode 3840x2400 --below ${primary}
   secondaryPosition=down
 fi
