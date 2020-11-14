@@ -83,7 +83,7 @@ yay -S slack-desktop zoom discord
 yay -S lastpass-cli gnome-keyring seahorse
 
 # dev
-yay -S jq go jdk-openjdk intellij-idea-ultimate-edition keybase docker docker-compose linux-aufs virtualbox virtualbox-host-modules-arch vagrant xclip
+yay -S jq go code-git keybase docker docker-compose linux-aufs virtualbox virtualbox-host-modules-arch vagrant xclip
 sudo systemctl enable docker
 sudo systemctl start docker
 sudo gpasswd -a tkellen docker

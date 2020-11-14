@@ -16,7 +16,7 @@ dbus-update-activation-environment --systemd DISPLAY
 ~/.config/i3/layout
 
 # start apps
-intellij-idea-ultimate-edition &
+code &
 redshift -l geoclue2 &
 
 echo "Xcursor.theme: ${XCURSOR_THEME}" > ~/.Xresources

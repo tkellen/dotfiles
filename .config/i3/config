@@ -22,6 +22,7 @@ for_window [workspace=$2] layout tabbed
 
 # send windows to specific workspaces
 assign [class="jetbrains-idea"] $1
+assign [class="code-oss"] $1
 assign [class="Slack"] $2
 assign [class="discord"] $2
 assign [class="zoom"] $2

@@ -1,5 +1,5 @@
-export PATH=${JAVA_HOME}/bin:${PATH}:${HOME}/go/bin
-export EDITOR=vim
+export PATH=${PATH}:${HOME}/go/bin
+export EDITOR=code
 # don't download terraform plugins everywhere
 export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
 
