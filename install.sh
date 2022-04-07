@@ -108,6 +108,9 @@ sudo sed -i '/Identifier "libinput touchpad catchall"/a Option "ClickMethod" "cl
 # handle touchscreen
 yay -S xorg-xinput
 
+# wifi tools
+yay -S aircrack-ng hashcat hashcat-utils intel-opencl-runtime
+
 # handle power button
 yay -S python-pip clearine
 grep -qxF 'HandlePowerKey=ignore' /etc/systemd/logind.conf || echo 'HandlePowerKey=ignore' | sudo tee -a /etc/systemd/logind.conf
