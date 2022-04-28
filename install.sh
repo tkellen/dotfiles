@@ -109,7 +109,7 @@ sudo sed -i '/Identifier "libinput touchpad catchall"/a Option "ClickMethod" "cl
 yay -S xorg-xinput
 
 # wifi tools
-yay -S aircrack-ng hashcat hashcat-utils intel-opencl-runtime
+yay -S aircrack-ng hashcat hcxtools intel-opencl-runtime
 
 # handle power button
 yay -S python-pip clearine
