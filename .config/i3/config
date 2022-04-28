@@ -31,7 +31,7 @@ bindsym $mod+Escape exec --no-startup-id clearine
 bindsym $mod+m exec --no-startup-id bash ~/.config/i3/layout
 bindsym $mod+Shift+m exec --no-startup-id xrandr --output eDP-1 --off
 bindsym $mod+d exec --no-startup-id rofi -theme launcher -show run
-bindsym $mod+Return exec termite
+bindsym $mod+Return exec alacritty
 bindsym $mod+Shift+Return exec google-chrome-stable
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer --sink 0 -i 5
@@ -88,5 +88,5 @@ gaps inner 10
 smart_gaps on
 smart_borders no_gaps
 
-exec --no-startup-id i3-msg 'workspace $0; exec termite'
+exec --no-startup-id i3-msg 'workspace $0; exec alacritty'
 exec --no-startup-id i3-msg 'workspace $3; exec google-chrome-stable'
