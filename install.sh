@@ -48,7 +48,7 @@ echo "GRUB_FONT=/boot/grub/fonts/droid.pf2" | sudo tee -a /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 # audio
-yay -S pulseaudio pamixer
+yay -S pipewire wireplumber pamixer
 
 # video
 yay -S vulkan-intel
@@ -67,14 +67,14 @@ sudo systemctl enable acpid
 sudo systemctl start acpid
 # TODO: configure /etc/acpi/handler.sh
 # browsers
-yay -S google-chrome firefox
+yay -S google-chrome-stable firefox
 
-sudo xdg-mime default google-chrome.desktop x-scheme-handler/http
-sudo xdg-mime default google-chrome.desktop x-scheme-handler/https
-sudo xdg-mime default google-chrome.desktop text/ht
+xdg-mime default google-chrome-stable.desktop x-scheme-handler/http
+xdg-mime default google-chrome=stable.desktop x-scheme-handler/https
+xdg-mime default google-chrome-stable.desktop text/http
 
 # shell
-yay -S zsh antibody alacritty
+yay -S zsh starship alacritty
 
 # chat
 yay -S slack-desktop zoom discord
@@ -116,7 +116,7 @@ yay -S python-pip clearine
 grep -qxF 'HandlePowerKey=ignore' /etc/systemd/logind.conf || echo 'HandlePowerKey=ignore' | sudo tee -a /etc/systemd/logind.conf
 
 # window manager
-yay -S i3-gaps i3blocks rofi
+yay -S xorg-xinit xorg-xserver i3-gaps i3blocks rofi
 mkdir -p ~/.config/desktop
 curl https://live.staticflickr.com/4094/4913311714_edca08c0dd_4k_d.jpg > ~/.config/desktop/fire.jpg
 

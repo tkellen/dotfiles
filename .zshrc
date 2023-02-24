@@ -6,24 +6,9 @@ export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
 # enable emacs-style control
 set -o emacs
 
-# shell decoration
-source <(antibody init)
+# style prompt
+source <(/usr/bin/starship init zsh --print-full-init)
 autoload -U promptinit; promptinit
-antibody bundle denysdovhan/spaceship-prompt
-SPACESHIP_PROMPT_ORDER=(
-  user          # Username section
-  dir           # Current directory section
-  host          # Hostname section
-  git           # Git section (git_branch + git_status)
-  aws           # Amazon Web Services section
-  # kubecontext   # Kubectl context section
-  exec_time     # Execution time
-  line_sep      # Line break
-  battery       # Battery level and status
-  jobs          # Background jobs indicator
-  exit_code     # Exit code section
-  char          # Prompt character
-)
 
 # enable shell completions
 autoload -Uz compinit
@@ -55,10 +40,10 @@ bindkey '^[[B' down-line-or-search # Search history matching current input
 
 # write out all credentials to ~/.ssh and ~/.aws
 function load-root-creds {
-  LPASS_DISABLE_PINENTRY=1 lpass login tyler@scaleout.team
+  LPASS_DISABLE_PINENTRY=1 lpass login tyler@wescaleout.com
   mkdir -p ~/.aws ~/.ssh
   chmod 644 ~/.ssh/*.pem ~/.ssh/id_rsa
-  lpass ls Root | grep -oP '(?<=id: )([0-9]+)' | xargs -I{} -n1 bash -c 'lpass show {} --notes > $(eval echo $(lpass show --name {}))'
+  lpass ls tyler@goingslowly.com/Root | grep -oP '(?<=id: )([0-9]+)' | xargs -I{} -n1 bash -c 'lpass show {} --notes > $(eval echo $(lpass show --name {}))'
   chmod 400 ~/.ssh/*.pem ~/.ssh/id_rsa
 }
 

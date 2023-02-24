@@ -1,6 +1,6 @@
 export GDK_SCALE=2
 export QT_SCALE_FACTOR=2
-export BROWSER=google-chrome-stable
+#export BROWSER=google-chrome-stable
 export XCURSOR_THEME=capitaine-cursors-hidpi
 export XCURSOR_SIZE=64
 
@@ -17,6 +17,7 @@ dbus-update-activation-environment --systemd DISPLAY
 
 # start apps
 code &
+slack &
 redshift -l geoclue2 &
 
 echo "Xcursor.theme: ${XCURSOR_THEME}" > ~/.Xresources
