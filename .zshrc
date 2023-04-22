@@ -1,4 +1,4 @@
-export PATH=${PATH}:${HOME}/go/bin
+export PATH=${PATH}:${HOME}/go/bin:${HOME}/.cargo/bin
 export EDITOR=code
 # don't download terraform plugins everywhere
 export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
@@ -19,6 +19,7 @@ source <(kubectl completion zsh)
 
 # pipe to clipboard easily
 alias clip="xclip -in -selection clipboard"
+alias wip="git add -A && git commit -m \"wip $(date)\" && git push origin"
 # use "k" for running kubectl faster (and ensure completions work too)
 alias k="kubectl"
 compdef k="kubectl"

@@ -19,6 +19,8 @@ dbus-update-activation-environment --systemd DISPLAY
 code &
 slack &
 redshift -l geoclue2 &
+alacritty -t terminal-main &
+feh --bg-scale ~/.config/desktop/fire.jpg &
 
 echo "Xcursor.theme: ${XCURSOR_THEME}" > ~/.Xresources
 xrdb ~/.Xresources

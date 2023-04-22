@@ -76,6 +76,3 @@ i3-msg "[workspace=0] move workspace to ${primary}"
 i3-msg "[workspace=1] move workspace to ${primary}"
 i3-msg "[workspace=2] move workspace to ${primary}"
 i3-msg "[workspace=3] move workspace to ${primary}"
-
-# scale backgrounds
-feh --bg-scale ~/.config/desktop/fire.jpg &

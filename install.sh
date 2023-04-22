@@ -83,7 +83,8 @@ yay -S slack-desktop zoom discord
 yay -S lastpass-cli gnome-keyring seahorse
 
 # dev
-yay -S jq go code-git keybase docker docker-compose linux-aufs virtualbox virtualbox-host-modules-arch vagrant xclip
+yay -S jq go code-git keybase docker docker-compose linux-aufs virtualbox virtualbox-host-modules-arch vagrant xclip rust
+cargo install tock
 sudo systemctl enable docker
 sudo systemctl start docker
 sudo gpasswd -a tkellen docker
@@ -116,7 +117,7 @@ yay -S python-pip clearine
 grep -qxF 'HandlePowerKey=ignore' /etc/systemd/logind.conf || echo 'HandlePowerKey=ignore' | sudo tee -a /etc/systemd/logind.conf
 
 # window manager
-yay -S xorg-xinit xorg-xserver i3-gaps i3blocks rofi
+yay -S xorg-xinit xorg-xserver i3-gaps i3blocks rofi feh
 mkdir -p ~/.config/desktop
 curl https://live.staticflickr.com/4094/4913311714_edca08c0dd_4k_d.jpg > ~/.config/desktop/fire.jpg
 

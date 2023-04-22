@@ -11,16 +11,27 @@ set $0 "0: &#xf471; "
 set $1 "1: &#xf126; "
 set $2 "2: &#xf2a0; "
 set $3 "3: &#xf6ec; "
+set $4 "4:  "
 
 workspace $0 output $primary $secondary
 workspace $1 output $primary $secondary
 workspace $2 output $primary $secondary
 workspace $3 output $primary $secondary
+workspace $4 output $primary $secondary
 
 # put all conversation apps on one panel
 for_window [workspace=$2] layout tabbed
 
+# set Zoom notification window to floating with no focus
+for_window [title="^zoom\s?$"] floating enable
+no_focus [title="^zoom\s?$"]
+
+# for meetings that you have joined via a link
+for_window [title="^join\?action=join.*$"] floating enable
+no_focus [title="^join\?action=join.*$"]
+
 # send windows to specific workspaces
+assign [title="terminal-main"] $0
 assign [class="jetbrains-idea"] $1
 assign [class="code-oss"] $1
 assign [class="Slack"] $2
@@ -29,10 +40,9 @@ assign [class="zoom"] $2
 
 bindsym $mod+Escape exec --no-startup-id clearine
 bindsym $mod+m exec --no-startup-id bash ~/.config/i3/layout
-bindsym $mod+Shift+m exec --no-startup-id xrandr --output eDP-1 --off
 bindsym $mod+d exec --no-startup-id rofi -theme launcher -show run
-bindsym $mod+Return exec google-chrome-stable
-bindsym $mod+Shift+Return exec alacritty
+bindsym $mod+Shift+Return exec google-chrome-stable
+bindsym $mod+Return exec alacritty
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer --sink 0 -i 5
 bindsym XF86AudioLowerVolume exec --no-startup-id pamixer --sink 0 -d 5
@@ -55,6 +65,8 @@ bindsym $mod+f fullscreen
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
+bindsym $mod+v split v
+bindsym $mod+h split h
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 bindsym $mod+p move workspace to output $secondaryPosition
@@ -62,6 +74,7 @@ bindsym $mod+grave workspace $0
 bindsym $mod+1 workspace $1
 bindsym $mod+2 workspace $2
 bindsym $mod+3 workspace $3
+bindsym $mod+4 workspace $4
 bindsym $mod+Left move workspace to output left
 bindsym $mod+Down move workspace to output down
 bindsym $mod+Up move workspace to output up
@@ -88,4 +101,7 @@ gaps inner 10
 smart_gaps on
 smart_borders no_gaps
 
-exec --no-startup-id i3-msg 'workspace $0; exec alacritty'
+exec --no-startup-id i3-msg "workspace \"4:  \"; append_layout /home/tkellen/sources/tkellen/dotfiles/.config/i3/time.json"
+exec --no-startup-id TZ=Pacific/Auckland alacritty -T time-local -o font.size=8 -e tock -mcs --format 'New Zealand | %A %B %d, %Y'
+exec --no-startup-id TZ=America/Chicago alacritty -T time-minnesota -o font.size=8 -e tock -mcs --format 'Minnesota, USA | %A %B %d, %Y'
+exec --no-startup-id TZ=America/New_York alacritty -T time-eastcoast -o font.size=8 -e tock -mcs --format 'East Coast, USA | %A %B %d, %Y'
