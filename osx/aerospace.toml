@@ -1,0 +1,52 @@
+start-at-login = true
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+accordion-padding = 30
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+key-mapping.preset = 'qwerty'
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+[gaps]
+inner.horizontal = 0
+inner.vertical =   0
+outer.left =       0
+outer.bottom =     0
+outer.top =        0
+outer.right =      0
+
+[mode.main.binding]
+cmd-h = [] # Disable "hide application"
+cmd-alt-h = [] # Disable "hide others"
+alt-e = 'layout tiles horizontal vertical'
+alt-w = 'layout v_accordion'
+
+alt-backtick = 'workspace T'
+alt-1 = 'workspace E'
+alt-2 = 'workspace W'
+alt-3 = 'workspace C'
+
+alt-shift-backtick = 'move-node-to-workspace T'
+alt-shift-1 = 'move-node-to-workspace E'
+alt-shift-2 = 'move-node-to-workspace W'
+alt-shift-3 = 'move-node-to-workspace C'
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace W'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.VSCode'
+run = 'move-node-to-workspace E'
+
+[[on-window-detected]]
+if.app-id = 'org.alacritty'
+run = 'move-node-to-workspace T'
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace C'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.teams2'
+run = 'move-node-to-workspace C'

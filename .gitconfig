@@ -1,9 +1,0 @@
-[user]
-	email = tyler@sleekcode.net
-	name = Tyler Kellen
-
-[core]
-    excludesfile = /home/tkellen/.gitignore_global
-
-[pull]
-	rebase = true
